@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements BabatorViewContro
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, mBabatorViewController);
         ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        //ft.addToBackStack(mBabatorViewController.getClass().getName());
         ft.commit();
 
         //endregion
