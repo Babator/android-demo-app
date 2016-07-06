@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //region BabatorViewHandler object
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
         mBabatorViewHandler = new BabatorViewHandler(this, mPlayer);
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.BababtorViewHandlerListener() {
