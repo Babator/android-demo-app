@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer);
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.BababtorViewHandlerListener() {
             @Override
