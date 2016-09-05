@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         //region BabatorViewHandler object
@@ -81,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
         mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
         mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.BababtorViewHandlerListener() {
+        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
                 Uri video = Uri.parse(videoParams.getVideoId());
@@ -94,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
