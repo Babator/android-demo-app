@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         mPlayer = (VideoView) findViewById(R.id.video_view);
-        Uri video = Uri.parse("http://download.itcuties.com/teaser/itcuties-teaser-480.mp4");
-        mPlayer.setVideoURI(video);
+        mPlayer.setVideoURI(Uri.parse(getString(R.string.content_url)));
 
         mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
