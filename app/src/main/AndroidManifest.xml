@@ -29,7 +29,10 @@
         <activity
             android:name=".PlayerActivityInline"
             android:configChanges="screenSize|keyboardHidden"
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".PlayerActivityAds"
+            android:configChanges="screenSize|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
