@@ -5,8 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.babator.babatorui.BabatorViewHandler;
-import com.babator.babatorui.babatorcore.BBVideoParams;
 import com.babator.babatorui.babatorcore.interfaces.BBAdsHandler;
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
 import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
@@ -44,19 +42,20 @@ public class VideoPlayerController implements AdErrorEvent.AdErrorListener,
     // Default VAST ad tag; more complex apps might select ad tag based on content video criteria.
     private String mDefaultAdTagUrl;
 
-    protected BabatorViewHandler mBabatorViewHandler = null;
+
 
     Context mContext;
     VideoPlayer mVideoPlayer;
-    String API_KEY;
-    private BBAdsHandler mBBAdsHandler;
+
+
+    private VideoPlayerControllerHandler mVideoPlayerControllerHandler;
 
     public VideoPlayerController(Context context, VideoPlayer videoPlayer,
-            ViewGroup adUiContainer, String apiKey) {
+            ViewGroup adUiContainer) {
 
         mContext = context;
         mVideoPlayer = videoPlayer;
-        API_KEY = apiKey;
+
 
         mVideoPlayerWithAdPlayback = new VideoPlayerWithAdPlayback(videoPlayer, adUiContainer);
         mVideoPlayerWithAdPlayback.init();
@@ -70,6 +69,14 @@ public class VideoPlayerController implements AdErrorEvent.AdErrorListener,
         mAdsLoader.addAdsLoadedListener(this);
     }
 
+    interface VideoPlayerControllerHandler {
+
+        void onAdEventChanged(BBAdsHandler.AdEvent adEvent);
+    }
+
+    public void setListener(VideoPlayerControllerHandler listener){
+        mVideoPlayerControllerHandler = listener;
+    }
     /**
      * Request video ads using the default VAST ad tag. Typically, you would change your ad tag
      * URL based on the current content being played.
@@ -111,16 +118,7 @@ public class VideoPlayerController implements AdErrorEvent.AdErrorListener,
         mAdsManager.addAdEventListener(this);
         mAdsManager.init();
 
-        mBabatorViewHandler = new BabatorViewHandler(mContext, mVideoPlayer, this.getClass());
-        mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
-            @Override
-            public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                mVideoPlayer.setVideoPath(mContext.getString(R.string.content_url));
-            }
-        });
 
-        mBBAdsHandler = mBabatorViewHandler.getBabator();
     }
 
     /**
@@ -140,7 +138,7 @@ public class VideoPlayerController implements AdErrorEvent.AdErrorListener,
                 mAdsManager.start();
                 break;
             case STARTED:
-                mBBAdsHandler.onAdEventChanged(BBAdsHandler.AdEvent.started);
+                mVideoPlayerControllerHandler.onAdEventChanged(BBAdsHandler.AdEvent.started);
                 break;
             case CONTENT_PAUSE_REQUESTED:
                 // AdEventType.CONTENT_PAUSE_REQUESTED is fired immediately before a video ad is
@@ -159,7 +157,7 @@ public class VideoPlayerController implements AdErrorEvent.AdErrorListener,
                 }
                 break;
             case COMPLETED:
-                mBBAdsHandler.onAdEventChanged(BBAdsHandler.AdEvent.ended);
+                mVideoPlayerControllerHandler.onAdEventChanged(BBAdsHandler.AdEvent.ended);
                 break;
             default:
                 break;

@@ -13,13 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 
+import com.babator.babatorui.BabatorViewHandler;
+import com.babator.babatorui.babatorcore.BBVideoParams;
+import com.babator.babatorui.babatorcore.interfaces.BBAdsHandler;
+
 import android_demo_app.babator.com.androiddemoapp.ads.VideoPlayer;
 
 public class PlayerActivityAds extends ActionBarActivity {
     private static String TAG = "PlayerActivityAds";
-
-    private MediaController mediaControls = null;
-    public static String API_KEY;
 
     // The video player.
     private static VideoPlayer mVideoPlayer;
@@ -27,6 +28,10 @@ public class PlayerActivityAds extends ActionBarActivity {
     private static ViewGroup mAdUIContainer;
     // The play button to trigger the ad request.
     private static View mPlayButton;
+
+    protected BabatorViewHandler mBabatorViewHandler = null;
+    String API_KEY;
+    static BBAdsHandler mBBAdsHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +65,33 @@ public class PlayerActivityAds extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mBabatorViewHandler = new BabatorViewHandler(this, mVideoPlayer, this.getClass());
+        mBabatorViewHandler.initialize(API_KEY);
+        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
+            @Override
+            public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
+                mVideoPlayer.setVideoPath(getString(R.string.content_url));
+            }
+        });
+
+        mBBAdsHandler = mBabatorViewHandler.getBabator();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
     }
 
     @Override
@@ -78,19 +100,24 @@ public class PlayerActivityAds extends ActionBarActivity {
         orientVideoDescriptionFragment(newConfig.orientation);
     }
 
+
+
+
     /**
      * The main fragment for displaying video content.
      */
-    public static class VideoFragment extends Fragment {
+    public static class VideoFragment extends Fragment implements VideoPlayerController.VideoPlayerControllerHandler{
 
         protected VideoPlayerController mVideoPlayerController;
+        private MediaController mediaControls = null;
 
         @Override
         public void onActivityCreated(Bundle bundle) {
             super.onActivityCreated(bundle);
             mVideoPlayerController = new VideoPlayerController(this.getActivity(), mVideoPlayer,
-                    mAdUIContainer, API_KEY);
+                    mAdUIContainer);
             mVideoPlayerController.setContentVideo(getString(R.string.content_url));
+            mVideoPlayerController.setListener(this);
 
             // When Play is clicked, request ads and hide the button.
             mPlayButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +128,7 @@ public class PlayerActivityAds extends ActionBarActivity {
                 }
             });
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,6 +155,12 @@ public class PlayerActivityAds extends ActionBarActivity {
                 mVideoPlayerController.pause();
             }
             super.onPause();
+        }
+
+        @Override
+        public void onAdEventChanged(BBAdsHandler.AdEvent adEvent) {
+            mBBAdsHandler.onAdEventChanged(adEvent);
+
         }
     }
 
