@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="VideoView_1">
+        <item>VideoView Activity</item>
+        <item>PlayerActivity</item>
+    </string-array>
+
+    <string-array name="VideoView_Inline">
+        <item>Inline VideoView Activity</item>
+        <item>PlayerActivityInline</item>
+    </string-array>
+
+
+    <array name="players">
+        <item>@array/VideoView_1</item>
+        <item>@array/VideoView_Inline</item>
+    </array>
+
+
+</resources>

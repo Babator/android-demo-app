@@ -1,104 +1,48 @@
 package android_demo_app.babator.com.androiddemoapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.MediaController;
-import android.widget.VideoView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.babator.babatorui.BabatorViewHandler;
-import com.babator.babatorui.babatorcore.BBVideoParams;
 
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = "PlayerActivity";
 
-    public static String API_KEY = "d035223d-8bba-40d2-bb13-5a22298250c6";
-    private VideoView mPlayer = null;
-    private MediaController mediaControls = null;
+    private RecyclerView mPlayersView = null;
+    private VideoListAdapter mAdapter = null;
 
-    private BabatorViewHandler mBabatorViewHandler = null;
+
+    private Class<?>[] activities = {};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
-        mPlayer = (VideoView) findViewById(R.id.video_view);
-        mPlayer.setVideoURI(Uri.parse(getString(R.string.content_url)));
+        //region Players RecyclerView and adapter
+        mPlayersView = (RecyclerView) findViewById(R.id.gridView);
+        if (mPlayersView != null) {
+            mPlayersView.setHasFixedSize(true);
+            mPlayersView.setLayoutManager(new GridLayoutManager(this, 1));
+            mAdapter = new VideoListAdapter(this, DemoAppUtils.loadArray(this, R.array.players));
+            mPlayersView.addItemDecoration(new DividerItemDecoration(this));
 
-        mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                    @Override
-                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        if (mediaControls == null) {
-                            mediaControls = new MediaController(MainActivity.this);
-                        }
-
-                        try {
-                            mPlayer.setMediaController(mediaControls);
-                            mediaControls.setAnchorView(mPlayer);
-
-                        }
-                        catch (Exception e){
-                            Log.e(TAG, "Error" + e.getMessage());
-                        }
-                    }
-                });
-                mPlayer.start();
-            }
-        });
-
-        mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.d("MediaPlayer info", "isPlaying -" + mp.isPlaying());
-                return false;
-            }
-        });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //region BabatorViewHandler object
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
+            mPlayersView.setAdapter(mAdapter);
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
-        mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
-            @Override
-            public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                Uri video = Uri.parse(videoParams.getVideoId());
-                mPlayer.setVideoURI(video);
-            }
-        });
+
         //endregion
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
     @Override
@@ -107,4 +51,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //region VideoListAdapter
+    public class VideoListAdapter extends RecyclerView.Adapter<CustomViewHolder> {
+
+        private String [][] itemsList;
+        private Context mContext;
+
+        public VideoListAdapter(Context context, String [][] items) {
+            this.itemsList = items;
+            this.mContext = context;
+        }
+
+        @Override
+        public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.grid_item, null);
+
+
+            CustomViewHolder viewHolder = new CustomViewHolder(view, new CustomViewHolder.IHolderClicks() {
+                @Override
+                public void onItemClick(CustomViewHolder caller, int position) {
+                    try {
+                        Class<?> cls = Class.forName("android_demo_app.babator.com.androiddemoapp." + itemsList[position][1]);
+                        mContext.startActivity(new Intent(mContext, cls).putExtra("api_key", getString(R.string.api_key)));
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
+            String[] feedItem = itemsList[i];
+            customViewHolder.tvName.setText(feedItem[0]);
+        }
+
+        @Override
+        public int getItemCount() {
+            return (null != itemsList ? itemsList.length : 0);
+        }
+
+    }
+    //endregion
 }
