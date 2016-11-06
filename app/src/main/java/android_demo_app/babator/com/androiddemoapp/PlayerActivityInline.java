@@ -8,13 +8,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
+import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 
 import java.lang.reflect.Field;
+
+import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
 public class PlayerActivityInline extends AppCompatActivity {
     private static String TAG = "PlayerActivityInline";
@@ -30,6 +34,9 @@ public class PlayerActivityInline extends AppCompatActivity {
     private static String KEY_SAVED_CUSTOMERS = "SAVED_CUSTOMERS";
     private int mVideoPosition = 0;
 
+    protected boolean hasAds = false;
+    BBIMAManager mAdManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,18 +51,28 @@ public class PlayerActivityInline extends AppCompatActivity {
 
         }
 
-
         Intent intent = getIntent();
         if(intent != null){
             API_KEY = intent.getStringExtra("api_key");
         }
 
-        mPlayer = (VideoView) findViewById(R.id.video_view);
-        if(currentURI == null){
-            currentURI = Uri.parse(getString(R.string.content_url));
-        }
-        mPlayer.setVideoURI(currentURI);
+        preparePlayer();
 
+    }
+
+    private void preparePlayer() {
+        mPlayer = (VideoView) findViewById(R.id.video_view);
+        if (!hasAds) {
+            Uri video = Uri.parse(getString(R.string.content_url));
+            mPlayer.setVideoURI(video);
+            mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                @Override
+                public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                    Log.d("MediaPlayer info", "isPlaying -" + mp.isPlaying());
+                    return false;
+                }
+            });
+        }
         mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -69,44 +86,24 @@ public class PlayerActivityInline extends AppCompatActivity {
                         try {
                             mPlayer.setMediaController(mediaControls);
                             mediaControls.setAnchorView(mPlayer);
-                        }
-                        catch (Exception e){
-                            Log.e(TAG, "Error" + e.getMessage());
+
+                        } catch (Exception e) {
+                            Log.e(getClass().getSimpleName(), "Error" + e.getMessage());
                         }
                     }
                 });
-                if(mVideoPosition > 0){
-                    mPlayer.seekTo(mVideoPosition);
-                }
                 mPlayer.start();
             }
         });
+    }
 
-        mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.d("MediaPlayer info", "isPlaying -" + mp.isPlaying());
-                currentURI =  (Uri) fetchFieldByName("mUri");
-                mVideoPosition = 0;
-                return false;
-            }
-        });
-
-        //region BabatorViewHandler object
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
+    protected void loadAds(String url) {
+        if (hasAds) {
+            mAdManager = new BBIMAManager(getApplicationContext(), url);
+            mAdManager.setListener(mBabatorViewHandler.getBabator());
+            ViewGroup adContainer = (ViewGroup) findViewById(R.id.adContainer);
+            mAdManager.requestAds(mPlayer, getString(R.string.ad_tag_url), adContainer);
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
-        mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
-            @Override
-            public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                Uri video = Uri.parse(videoParams.getVideoId());
-                mPlayer.setVideoURI(video);
-            }
-        });
-        //endregion
-
     }
 
 
@@ -134,6 +131,26 @@ public class PlayerActivityInline extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
+        mBabatorViewHandler.initialize(API_KEY);
+        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
+            @Override
+            public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
+                Uri video = Uri.parse(videoParams.getVideoId());
+                mPlayer.setVideoURI(video);
+            }
+        });
+        mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
+            @Override
+            public boolean shouldLoadAd(String recommendationUrl) {
+                loadAds(recommendationUrl);
+                return true;
+            }
+        });
+        loadAds(getString(R.string.content_url));
 
     }
 

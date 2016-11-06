@@ -8,11 +8,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
+import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
+
+import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
+
 
 public class PlayerActivity extends Activity {
     private static String TAG = "PlayerActivity";
@@ -20,6 +25,9 @@ public class PlayerActivity extends Activity {
     protected VideoView mPlayer = null;
     private MediaController mediaControls = null;
     private String API_KEY;
+
+    protected boolean hasAds = false;
+    BBIMAManager mAdManager;
 
 
     @Override
@@ -30,13 +38,25 @@ public class PlayerActivity extends Activity {
         Intent intent = getIntent();
         if(intent != null){
             API_KEY = intent.getStringExtra("api_key");
+            hasAds = intent.getBooleanExtra("Ads", true);
         }
 
+        preparePlayer();
+    }
 
+    private void preparePlayer() {
         mPlayer = (VideoView) findViewById(R.id.video_view);
-        Uri video = Uri.parse(getString(R.string.content_url));
-        mPlayer.setVideoURI(video);
-
+        if (!hasAds) {
+            Uri video = Uri.parse(getString(R.string.content_url));
+            mPlayer.setVideoURI(video);
+            mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                @Override
+                public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                    Log.d("MediaPlayer info", "isPlaying -" + mp.isPlaying());
+                    return false;
+                }
+            });
+        }
         mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -51,23 +71,23 @@ public class PlayerActivity extends Activity {
                             mPlayer.setMediaController(mediaControls);
                             mediaControls.setAnchorView(mPlayer);
 
-                        }
-                        catch (Exception e){
-                            Log.e(TAG, "Error" + e.getMessage());
+                        } catch (Exception e) {
+                            Log.e(getClass().getSimpleName(), "Error" + e.getMessage());
                         }
                     }
                 });
                 mPlayer.start();
             }
         });
+    }
 
-        mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.d("MediaPlayer info", "isPlaying -" + mp.isPlaying());
-                return false;
-            }
-        });
+    protected void loadAds(String url) {
+        if (hasAds) {
+            mAdManager = new BBIMAManager(getApplicationContext(), url);
+            mAdManager.setListener(mBabatorViewHandler.getBabator());
+            ViewGroup adContainer = (ViewGroup) findViewById(R.id.adContainer);
+            mAdManager.requestAds(mPlayer, getString(R.string.ad_tag_url), adContainer);
+        }
     }
 
     @Override
@@ -86,6 +106,14 @@ public class PlayerActivity extends Activity {
                 mPlayer.setVideoURI(video);
             }
         });
+        mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
+            @Override
+            public boolean shouldLoadAd(String recommendationUrl) {
+                loadAds(recommendationUrl);
+                return true;
+            }
+        });
+        loadAds(getString(R.string.content_url));
         //endregion
     }
 

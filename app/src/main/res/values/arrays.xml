@@ -10,15 +10,9 @@
         <item>PlayerActivityInline</item>
     </string-array>
 
-    <string-array name="VideoView_Ads">
-        <item>VideoView Activity with Ads</item>
-        <item>PlayerActivityAds</item>
-    </string-array>
-
     <array name="players">
         <item>@array/VideoView_1</item>
         <item>@array/VideoView_Inline</item>
-        <item>@array/VideoView_Ads</item>
     </array>
 
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="babator.com.babatorsdk.PlayerActivity">
+    tools:context="android_demo_app.babator.com.androiddemoapp.PlayerActivity">
         <VideoView
             android:id="@+id/video_view"
             android:layout_width="match_parent"

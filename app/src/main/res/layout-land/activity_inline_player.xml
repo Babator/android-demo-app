@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="babator.com.babatorsdk.PlayerActivityInline">
+    tools:context="android_demo_app.babator.com.androiddemoapp.PlayerActivityInline">
 
         <RelativeLayout
             android:id="@+id/LinearLayoutActivity3"
@@ -24,6 +24,12 @@
                     android:layout_gravity="center"
 
                     />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/adContainer">
+
+                </FrameLayout>
 
         </RelativeLayout>
 

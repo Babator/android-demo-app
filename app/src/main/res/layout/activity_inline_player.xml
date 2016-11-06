@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:fitsSystemWindows="true"
-tools:context="babator.com.babatorsdk.PlayerActivity">
+tools:context="android_demo_app.babator.com.androiddemoapp.PlayerActivityInline">
 
 <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
@@ -56,6 +56,12 @@ tools:context="babator.com.babatorsdk.PlayerActivity">
                     android:layout_alignParentRight="true"
                     android:layout_alignParentLeft="true"
                     />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/adContainer">
+
+                </FrameLayout>
 
         </LinearLayout>
 
