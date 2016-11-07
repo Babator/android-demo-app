@@ -89,10 +89,11 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
     public void onAdEvent(AdEvent adEvent) {
         switch (adEvent.getType()) {
             case LOADED:
-                mListener.onAdEventChanged(BBAdsHandler.AdEvent.started);
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.loaded);
                 mAdsManager.start();
                 break;
             case STARTED:
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.started);
                 break;
             case CONTENT_RESUME_REQUESTED:
                 mPlayerHandler.restorePlayerContent(mContext);
