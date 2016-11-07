@@ -32,7 +32,7 @@ public class PlayerActivityInline extends AppCompatActivity {
     private static String KEY_SAVED_VIDEO_URI = "SAVED_VIDEO_URI";
     private static String KEY_SAVED_VIDEO_POSITION = "SAVED_VIDEO_POSITION";
     private static String KEY_SAVED_CUSTOMERS = "SAVED_CUSTOMERS";
-    private int mVideoPosition = 0;
+    private int mVideoPosition = -1;
 
     protected boolean hasAds = false;
     BBIMAManager mAdManager;
@@ -93,6 +93,9 @@ public class PlayerActivityInline extends AppCompatActivity {
                     }
                 });
                 mPlayer.start();
+                if(mVideoPosition != -1){
+                    mPlayer.seekTo(mVideoPosition);
+                }
             }
         });
     }
