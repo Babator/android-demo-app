@@ -56,6 +56,9 @@ public class PlayerActivityInline extends AppCompatActivity {
             API_KEY = intent.getStringExtra("api_key");
         }
 
+        if(currentURI == null){
+            currentURI = Uri.parse(getString(R.string.content_url));
+        }
         preparePlayer();
 
     }
