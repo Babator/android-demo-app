@@ -28,7 +28,7 @@ public class PlayerActivity extends Activity {
 
     protected boolean hasAds = false;
     BBIMAManager mAdManager;
-
+    Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,8 @@ public class PlayerActivity extends Activity {
     private void preparePlayer() {
         mPlayer = (VideoView) findViewById(R.id.video_view);
         if (!hasAds) {
-            Uri video = Uri.parse(getString(R.string.content_url));
-            mPlayer.setVideoURI(video);
+            initialUri = Uri.parse(getString(R.string.content_url));
+            mPlayer.setVideoURI(initialUri);
             mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -97,13 +97,12 @@ public class PlayerActivity extends Activity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri);
         mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
+        mBabatorViewHandler.setListener(new BabatorViewHandler.BabatorViewHandlerListener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                Uri video = Uri.parse(videoParams.getVideoId());
-                mPlayer.setVideoURI(video);
+
             }
         });
         mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {

@@ -28,7 +28,6 @@ public class PlayerActivityInline extends AppCompatActivity {
     private String API_KEY;
     private BabatorViewHandler mBabatorViewHandler = null;
 
-    private Uri currentURI;
     private static String KEY_SAVED_VIDEO_URI = "SAVED_VIDEO_URI";
     private static String KEY_SAVED_VIDEO_POSITION = "SAVED_VIDEO_POSITION";
     private static String KEY_SAVED_CUSTOMERS = "SAVED_CUSTOMERS";
@@ -36,6 +35,7 @@ public class PlayerActivityInline extends AppCompatActivity {
 
     protected boolean hasAds = false;
     BBIMAManager mAdManager;
+    Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class PlayerActivityInline extends AppCompatActivity {
         if(savedInstanceState == null){ //1st creation of activity
 
         } else { // we already have something. not 1st time of this activity
-            currentURI = Uri.parse(savedInstanceState.getString(KEY_SAVED_VIDEO_URI));
+            initialUri = Uri.parse(savedInstanceState.getString(KEY_SAVED_VIDEO_URI));
             mVideoPosition = savedInstanceState.getInt(KEY_SAVED_VIDEO_POSITION);
 
         }
@@ -56,8 +56,8 @@ public class PlayerActivityInline extends AppCompatActivity {
             API_KEY = intent.getStringExtra("api_key");
         }
 
-        if(currentURI == null){
-            currentURI = Uri.parse(getString(R.string.content_url));
+        if(initialUri == null){
+            initialUri = Uri.parse(getString(R.string.content_url));
         }
         preparePlayer();
 
@@ -115,7 +115,7 @@ public class PlayerActivityInline extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(KEY_SAVED_VIDEO_URI, currentURI.toString());
+        outState.putString(KEY_SAVED_VIDEO_URI, initialUri.toString());
         outState.putInt(KEY_SAVED_VIDEO_POSITION, mVideoPosition);
         super.onSaveInstanceState(outState);
     }
@@ -140,13 +140,12 @@ public class PlayerActivityInline extends AppCompatActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass());
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri);
         mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
+        mBabatorViewHandler.setListener(new BabatorViewHandler.BabatorViewHandlerListener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                Uri video = Uri.parse(videoParams.getVideoId());
-                mPlayer.setVideoURI(video);
+
             }
         });
         mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
