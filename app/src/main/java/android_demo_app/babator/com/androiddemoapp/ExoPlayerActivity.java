@@ -86,7 +86,7 @@ public class ExoPlayerActivity extends AppCompatActivity {
         }
         mBabatorViewHandler = new BabatorViewHandler(this, simpleExoPlayerView, this.getClass(), initialUri);
         mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.BabatorViewHandlerListener() {
+        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
 

@@ -142,7 +142,7 @@ public class PlayerActivityInline extends AppCompatActivity {
         }
         mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri);
         mBabatorViewHandler.initialize(API_KEY);
-        mBabatorViewHandler.setListener(new BabatorViewHandler.BabatorViewHandlerListener() {
+        mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
 
