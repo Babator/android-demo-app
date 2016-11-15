@@ -28,5 +28,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.2.1'
     compile 'com.google.android.exoplayer:exoplayer:r2.0.3'
-    compile 'com.babator.babatorui:babatorui:0.1.0.9'
+    compile 'com.babator.babatorui:babatorui:0.1.0.10'
 }
