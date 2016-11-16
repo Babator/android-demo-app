@@ -34,6 +34,18 @@
             android:name=".ExoPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".JWPlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="JW_LICENSE_KEY"
+            android:value="K3UVEu7NiTcbpEk5X8AQsRI4ayfO6Y96oH7VCA==" />
     </application>
 
 </manifest>

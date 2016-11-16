@@ -14,11 +14,16 @@
         <item>ExoPlayer Activity</item>
         <item>ExoPlayerActivity</item>
     </string-array>
+    <string-array name="JWPlayer">
+        <item>JW Player Activity</item>
+        <item>JWPlayerActivity</item>
+    </string-array>
 
     <array name="players">
         <item>@array/VideoView_1</item>
         <item>@array/VideoView_Inline</item>
         <item>@array/ExoPlayer</item>
+        <item>@array/JWPlayer</item>
     </array>
 
 
