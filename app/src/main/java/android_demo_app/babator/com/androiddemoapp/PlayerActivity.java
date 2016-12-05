@@ -21,14 +21,14 @@ import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
 public class PlayerActivity extends Activity {
     private static String TAG = "PlayerActivity";
-    protected BabatorViewHandler mBabatorViewHandler = null;
-    protected VideoView mPlayer = null;
+    private BabatorViewHandler mBabatorViewHandler = null;
+    private VideoView mPlayer = null;
     private MediaController mediaControls = null;
     private String API_KEY;
 
-    protected boolean hasAds = false;
-    BBIMAManager mAdManager;
-    Uri initialUri;
+    private boolean hasAds = false;
+    private BBIMAManager mAdManager;
+    private Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class PlayerActivity extends Activity {
         });
     }
 
-    protected void loadAds(String url) {
+    private void loadAds(String url) {
         if (hasAds) {
             mAdManager = new BBIMAManager(getApplicationContext(), url);
             mAdManager.setListener(mBabatorViewHandler.getBabator());

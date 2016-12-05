@@ -9,7 +9,7 @@ import android.widget.TextView;
  */
 public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     protected TextView tvName;
-    protected IHolderClicks mListener;
+    private final IHolderClicks mListener;
 
     /**
      * Constructor

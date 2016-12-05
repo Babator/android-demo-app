@@ -18,12 +18,17 @@
         <item>JW Player Activity</item>
         <item>JWPlayerActivity</item>
     </string-array>
+    <string-array name="Media_Player">
+        <item>MediaPlayer Activity</item>
+        <item>MediaPlayerActivity</item>
+    </string-array>
 
     <array name="players">
         <item>@array/VideoView_1</item>
         <item>@array/VideoView_Inline</item>
         <item>@array/ExoPlayer</item>
         <item>@array/JWPlayer</item>
+        <item>@array/Media_Player</item>
     </array>
 
 

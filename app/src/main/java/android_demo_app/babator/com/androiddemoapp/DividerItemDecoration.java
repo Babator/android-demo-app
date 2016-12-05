@@ -8,13 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/**
- * Created by danshneider on 11/09/2016.
- */
-public class DividerItemDecoration extends RecyclerView.ItemDecoration{
+class DividerItemDecoration extends RecyclerView.ItemDecoration{
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 
-    private Drawable mDivider;
+    private final Drawable mDivider;
 
     /**
      * Default divider will be used
