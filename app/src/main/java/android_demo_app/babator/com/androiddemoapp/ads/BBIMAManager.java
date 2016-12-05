@@ -14,23 +14,27 @@ import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent;
 import com.google.ads.interactivemedia.v3.api.AdsRequest;
 import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
 
+/**
+ * Created by nissimpardo on 25/10/2016.
+ */
+
 public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.AdsLoadedListener, AdEvent.AdEventListener {
     // The AdsLoader instance exposes the requestAds method.
-    private final AdsLoader mAdsLoader;
+    private AdsLoader mAdsLoader;
 
     // AdsManager exposes methods to control ad playback and listen to ad events.
     private AdsManager mAdsManager;
 
     // Factory class for creating SDK objects.
-    private final ImaSdkFactory mSdkFactory;
+    private ImaSdkFactory mSdkFactory;
 
     private BBAdsHandler mListener;
 
-    private BBAdVideoPlayer mPlayerHandler;
+    private BBAdVideoPlayerFactory.PlayerAdsWrapper mPlayerHandler;
 
-    private final String mContentUrl;
+    private String mContentUrl;
 
-    private final Context mContext;
+    private Context mContext;
 
     public BBIMAManager(Context context, String contentUrl) {
         // Create an AdsLoader.
@@ -44,7 +48,7 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
 
     public void requestAds(Object player, String adTagUrl, ViewGroup adContainer) {
         AdDisplayContainer adDisplayContainer = mSdkFactory.createAdDisplayContainer();
-        mPlayerHandler = new BBAdVideoPlayer(player, mContentUrl);
+        mPlayerHandler = new BBAdVideoPlayerFactory().getPlayerAdsWrapper(mContext, player, mContentUrl, adTagUrl);
         adDisplayContainer.setPlayer(mPlayerHandler);
         adDisplayContainer.setAdContainer(adContainer);
         // Create the ads request.
@@ -52,21 +56,30 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
         request.setAdTagUrl(adTagUrl);
         request.setAdDisplayContainer(adDisplayContainer);
         request.setContentProgressProvider(mPlayerHandler);
-
         // Request the ad. After the ad is loaded, onAdsManagerLoaded() will be called.
         mAdsLoader.requestAds(request);
     }
-
-
 
     public void setListener(BBAdsHandler listener) {
         mListener = listener;
     }
 
+    public void dispose(){
+        try {
+            if(mPlayerHandler != null){
+                mPlayerHandler.dismissAdHandling();
+                mPlayerHandler = null;
+            }
+        }
+        catch (Exception e){
+            Log.d("BBIMAManager", "BBIMAManager.dispose(): " + e.getMessage());
+        }
+    }
+
     @Override
     public void onAdError(AdErrorEvent adErrorEvent) {
-        Log.d("BBAdVideoPlayer", adErrorEvent.getError().getMessage());
-        mListener.onAdEventChanged(BBAdsHandler.AdEvent.error);
+        Log.d("BBIMAManager", adErrorEvent.getError().getMessage());
+        mListener.onAdEventChanged(BBAdsHandler.AdEvent.error, mPlayerHandler.getAdUrl());
     }
 
     @Override
@@ -83,13 +96,14 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
 
     @Override
     public void onAdEvent(AdEvent adEvent) {
+        Log.d("BBIMAManager", "BBIMAManager.onAdEvent(): " + adEvent.getType().toString());
         switch (adEvent.getType()) {
             case LOADED:
-                mListener.onAdEventChanged(BBAdsHandler.AdEvent.loaded);
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.loaded, mPlayerHandler.getAdUrl());
                 mAdsManager.start();
                 break;
             case STARTED:
-                mListener.onAdEventChanged(BBAdsHandler.AdEvent.started);
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.started, mPlayerHandler.getAdUrl());
                 break;
             case CONTENT_RESUME_REQUESTED:
                 mPlayerHandler.restorePlayerContent(mContext);
@@ -108,7 +122,10 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
                 }
                 break;
             case COMPLETED:
-                mListener.onAdEventChanged(BBAdsHandler.AdEvent.ended);
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.ended, mPlayerHandler.getAdUrl());
+                break;
+            case SKIPPED:
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.skipped, mPlayerHandler.getAdUrl());
                 break;
             default:
                 break;

@@ -44,7 +44,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
 
-    private final BabatorViewHandler mBabatorViewHandler = null;
+    private BabatorViewHandler mBabatorViewHandler = null;
 
     private Uri initialUri;
     private boolean hasAds = false;
@@ -113,7 +113,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
             }
 
             //region BabatorViewHandler object
-           /* if(mBabatorViewHandler != null){
+            if(mBabatorViewHandler != null){
                 mBabatorViewHandler.dispose();
             }
             mBabatorViewHandler = new BabatorViewHandler(this, mMediaPlayer, mSurfaceView, this.getClass(), initialUri) ;
@@ -127,11 +127,11 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
             mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
                 @Override
                 public boolean shouldLoadAd(String recommendationUrl) {
-                    loadAds(recommendationUrl);
+                    //loadAds(recommendationUrl);
                     return true;
                 }
-            });*/
-            loadAds(getString(R.string.content_url));
+            });
+            //loadAds(getString(R.string.content_url));
             //endregion
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,31 +8,36 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
-import com.google.ads.interactivemedia.v3.api.player.VideoAdPlayer;
 import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
-    private final VideoView mPlayer;
-    private boolean mIsAdDisplayed;
-    private long mCurrentPosition;
-    private final List<VideoAdPlayerCallback> mAdCallbacks =
-            new ArrayList<VideoAdPlayerCallback>(1);
-    private final MediaPlayer.OnCompletionListener mOnCompletionListener;
+/**
+ * Created by nissimpardo on 26/10/2016.
+ */
+
+public class BBAdVideoViewPlayer implements BBAdVideoPlayerFactory.PlayerAdsWrapper {
+    static final String TAG = "BBAdVideoViewPlayer";
+    protected static Context mContext;
+    protected Object mPlayer;
+    protected PlayerState mPlayerState = PlayerState.unknown;
+    protected static String mContentUrl;
+    protected static String mAdUrl;
+    protected boolean mIsAdDisplayed;
+    protected long mCurrentPosition;
+    protected final List<VideoAdPlayerCallback> mAdCallbacks = new ArrayList<VideoAdPlayerCallback>(1);
+
+    private MediaPlayer.OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
-    private Handler stateHandler;
-    private PlayerState mPlayerState = PlayerState.unknown;
-    private final String mContentUrl;
     private MediaController mediaControls;
+    private Handler stateHandler;
 
     private enum PlayerState {
         unknown,
         playing,
-        paused
+        paused;
     }
 
     private void updatePlayerState() {
@@ -43,41 +48,37 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
             @Override
             public void run() {
                 if (mPlayer != null) {
-                    if (mPlayer.isPlaying() && mPlayerState == PlayerState.paused) {
+                    if (((VideoView)mPlayer).isPlaying() && mPlayerState == PlayerState.paused) {
                         for (VideoAdPlayerCallback adCallback : mAdCallbacks) {
                             if (mIsAdDisplayed) {
                                 adCallback.onPlay();
                             }
                         }
-                    } else if (!mPlayer.isPlaying() && mPlayerState == PlayerState.playing) {
+                    } else if (!((VideoView)mPlayer).isPlaying() && mPlayerState == PlayerState.playing) {
                         for (VideoAdPlayerCallback adCallback : mAdCallbacks) {
                             if (mIsAdDisplayed) {
                                 adCallback.onPause();
                             }
                         }
                     }
-                    mPlayerState = mPlayer.isPlaying() ? PlayerState.playing : PlayerState.paused;
-                    Log.d("BBAdVideoPlayer", mPlayerState.toString());
+                    mPlayerState = ((VideoView)mPlayer).isPlaying() ? PlayerState.playing : PlayerState.paused;
+                    Log.d(TAG, mPlayerState.toString());
                 }
                 updatePlayerState();
             }
         }, 200);
     }
 
-    public BBAdVideoPlayer(Object player, String contentUrl) {
-        mPlayer = (VideoView) player;
+    public BBAdVideoViewPlayer(){
+
+    }
+    public BBAdVideoViewPlayer(Context context, Object player, String contentUrl, String adUrl) {
+        mContext = context;
+        mPlayer = player;
         mOnCompletionListener = (MediaPlayer.OnCompletionListener)fetchFieldByName("mOnCompletionListener");
-//        mOnPreparedListener = (MediaPlayer.OnPreparedListener) fetchFieldByName("mOnPreparedListener");
-//        mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                if (mOnPreparedListener != null) {
-//                    mOnPreparedListener.onPrepared(mp);
-//                }
-//            }
-//        });
         mContentUrl = contentUrl; //fetchFieldByName("mUri").toString();
-        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mAdUrl = adUrl;
+        ((VideoView)mPlayer).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 if (mIsAdDisplayed) {
@@ -85,7 +86,6 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
                         adCallback.onEnded();
                     }
                     mIsAdDisplayed = false;
-                    Log.d("BBAdVideoPlayer", mContentUrl);
                 }
                 if (mOnCompletionListener != null) {
                     mOnCompletionListener.onCompletion(mp);
@@ -96,57 +96,62 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
     }
 
     public void restorePlayerContent(final Context context) {
-        mPlayer.setVideoPath(mContentUrl);
+        ((VideoView)mPlayer).setVideoPath(mContentUrl);
         if (mCurrentPosition > 0) {
-            mPlayer.seekTo((int) mCurrentPosition);
+            ((VideoView)mPlayer).seekTo((int) mCurrentPosition);
         }
-        mPlayer.start();
+        ((VideoView)mPlayer).start();
     }
 
     public void storeContentPosition() {
-        mCurrentPosition = mPlayer.getCurrentPosition();
+        mCurrentPosition = ((VideoView)mPlayer).getCurrentPosition();
         if (mediaControls != null) {
             mediaControls.setVisibility(View.INVISIBLE);
         }
     }
 
     public void setCurrentPosition(long currentPosition) {
-        mPlayer.seekTo(0);
+        ((VideoView)mPlayer).seekTo(0);
     }
 
     public void dismissAdHandling() {
-        stateHandler.removeMessages(0);
-        stateHandler = null;
+        if(stateHandler != null) {
+            stateHandler.removeMessages(0);
+            stateHandler = null;
+        }
     }
-
-
 
     @Override
     public void playAd() {
         mIsAdDisplayed = true;
         updatePlayerState();
-        mPlayer.start();
+        ((VideoView)mPlayer).start();
     }
 
     @Override
     public void loadAd(String s) {
         mIsAdDisplayed = true;
-        mPlayer.setVideoPath(s);
+        ((VideoView)mPlayer).setVideoPath(s);
     }
 
     @Override
     public void stopAd() {
-        mPlayer.stopPlayback();
+        ((VideoView)mPlayer).stopPlayback();
     }
 
     @Override
     public void pauseAd() {
-        mPlayer.pause();
+        ((VideoView)mPlayer).pause();
     }
 
     @Override
     public void resumeAd() {
         playAd();
+    }
+
+    @Override
+    public String getAdUrl() {
+        return this.mAdUrl;
     }
 
     @Override
@@ -161,18 +166,18 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
 
     @Override
     public VideoProgressUpdate getAdProgress() {
-        if (!mIsAdDisplayed || mPlayer.getDuration() <= 0) {
+        if (!mIsAdDisplayed || ((VideoView)mPlayer).getDuration() <= 0) {
             return  VideoProgressUpdate.VIDEO_TIME_NOT_READY;
         }
-        return new VideoProgressUpdate(mPlayer.getCurrentPosition(), mPlayer.getDuration());
+        return new VideoProgressUpdate(((VideoView)mPlayer).getCurrentPosition(), ((VideoView)mPlayer).getDuration());
     }
 
     @Override
     public VideoProgressUpdate getContentProgress() {
-        if (mIsAdDisplayed || mPlayer.getDuration() <= 0) {
+        if (mIsAdDisplayed || ((VideoView)mPlayer).getDuration() <= 0) {
             return  VideoProgressUpdate.VIDEO_TIME_NOT_READY;
         }
-        return new VideoProgressUpdate(mPlayer.getCurrentPosition(), mPlayer.getDuration());
+        return new VideoProgressUpdate(((VideoView)mPlayer).getCurrentPosition(), ((VideoView)mPlayer).getDuration());
     }
 
     private Object fetchFieldByName(String name) {
@@ -181,9 +186,7 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
             Field field = VideoView.class.getDeclaredField(name);
             field.setAccessible(true);
             fetched = field.get(mPlayer);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) {}
         return fetched;
     }
 }
