@@ -4,14 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
-
-/**
- * Created by danshneider on 05/09/2016.
- */
-public class DemoAppUtils {
+class DemoAppUtils {
 
     public static String[][] loadArray(Context context, int arrId){
-        String[][] array = null;
+        String[][] array;
         try {
             Resources res = context.getResources();
             TypedArray ta = res.obtainTypedArray(arrId);

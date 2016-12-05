@@ -35,7 +35,7 @@ public class ExoPlayerActivity extends AppCompatActivity {
     private SimpleExoPlayerView simpleExoPlayerView;
     private BabatorViewHandler mBabatorViewHandler = null;
     private SimpleExoPlayer mPlayer;
-    Uri initialUri;
+    private Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

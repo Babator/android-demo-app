@@ -27,7 +27,7 @@ public class JWPlayerActivity extends AppCompatActivity {
     protected boolean hasAds = false;
     private FrameLayout mPlayerContainer;
     private ViewGroup.LayoutParams mInitialLayoutParams;
-    protected BabatorViewHandler mBabatorViewHandler = null;
+    private BabatorViewHandler mBabatorViewHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +78,6 @@ public class JWPlayerActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
         if(mJWPlayerView != null) {

@@ -28,14 +28,14 @@ public class PlayerActivityInline extends AppCompatActivity {
     private String API_KEY;
     private BabatorViewHandler mBabatorViewHandler = null;
 
-    private static String KEY_SAVED_VIDEO_URI = "SAVED_VIDEO_URI";
-    private static String KEY_SAVED_VIDEO_POSITION = "SAVED_VIDEO_POSITION";
+    private static final String KEY_SAVED_VIDEO_URI = "SAVED_VIDEO_URI";
+    private static final String KEY_SAVED_VIDEO_POSITION = "SAVED_VIDEO_POSITION";
     private static String KEY_SAVED_CUSTOMERS = "SAVED_CUSTOMERS";
     private int mVideoPosition = -1;
 
-    protected boolean hasAds = false;
-    BBIMAManager mAdManager;
-    Uri initialUri;
+    private final boolean hasAds = false;
+    private BBIMAManager mAdManager;
+    private Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +103,7 @@ public class PlayerActivityInline extends AppCompatActivity {
         });
     }
 
-    protected void loadAds(String url) {
+    private void loadAds(String url) {
         if (hasAds) {
             mAdManager = new BBIMAManager(getApplicationContext(), url);
             mAdManager.setListener(mBabatorViewHandler.getBabator());
@@ -125,10 +125,6 @@ public class PlayerActivityInline extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -169,7 +165,7 @@ public class PlayerActivityInline extends AppCompatActivity {
             }
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
 
     }
@@ -188,7 +184,9 @@ public class PlayerActivityInline extends AppCompatActivity {
             Field field = VideoView.class.getDeclaredField(name);
             field.setAccessible(true);
             fetched = field.get(mPlayer);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return fetched;
     }
 }

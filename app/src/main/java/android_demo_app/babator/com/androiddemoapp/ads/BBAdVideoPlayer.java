@@ -16,27 +16,23 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by nissimpardo on 26/10/2016.
- */
-
 public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
-    private VideoView mPlayer;
+    private final VideoView mPlayer;
     private boolean mIsAdDisplayed;
     private long mCurrentPosition;
     private final List<VideoAdPlayerCallback> mAdCallbacks =
             new ArrayList<VideoAdPlayerCallback>(1);
-    private MediaPlayer.OnCompletionListener mOnCompletionListener;
+    private final MediaPlayer.OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
     private Handler stateHandler;
     private PlayerState mPlayerState = PlayerState.unknown;
-    private String mContentUrl;
+    private final String mContentUrl;
     private MediaController mediaControls;
 
     private enum PlayerState {
         unknown,
         playing,
-        paused;
+        paused
     }
 
     private void updatePlayerState() {
@@ -185,7 +181,9 @@ public class BBAdVideoPlayer implements VideoAdPlayer, ContentProgressProvider {
             Field field = VideoView.class.getDeclaredField(name);
             field.setAccessible(true);
             fetched = field.get(mPlayer);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return fetched;
     }
 }

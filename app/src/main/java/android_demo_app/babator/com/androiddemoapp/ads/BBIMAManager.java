@@ -14,27 +14,23 @@ import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent;
 import com.google.ads.interactivemedia.v3.api.AdsRequest;
 import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
 
-/**
- * Created by nissimpardo on 25/10/2016.
- */
-
 public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.AdsLoadedListener, AdEvent.AdEventListener {
     // The AdsLoader instance exposes the requestAds method.
-    private AdsLoader mAdsLoader;
+    private final AdsLoader mAdsLoader;
 
     // AdsManager exposes methods to control ad playback and listen to ad events.
     private AdsManager mAdsManager;
 
     // Factory class for creating SDK objects.
-    private ImaSdkFactory mSdkFactory;
+    private final ImaSdkFactory mSdkFactory;
 
     private BBAdsHandler mListener;
 
     private BBAdVideoPlayer mPlayerHandler;
 
-    private String mContentUrl;
+    private final String mContentUrl;
 
-    private Context mContext;
+    private final Context mContext;
 
     public BBIMAManager(Context context, String contentUrl) {
         // Create an AdsLoader.

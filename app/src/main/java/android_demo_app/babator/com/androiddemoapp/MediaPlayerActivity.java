@@ -34,7 +34,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
         MediaPlayer.OnInfoListener,
         MediaController.MediaPlayerControl
 {
-    private static String TAG = "MediaPlayerActivity";
+    private static final String TAG = "MediaPlayerActivity";
 
     private MediaPlayer mMediaPlayer;
     private MediaController mMediaController;
@@ -44,12 +44,12 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
 
-    private BabatorViewHandler mBabatorViewHandler = null;
+    private final BabatorViewHandler mBabatorViewHandler = null;
 
     private Uri initialUri;
-    protected boolean hasAds = false;
-    BBIMAManager mAdManager;
-    ViewGroup.LayoutParams initialParams;
+    private boolean hasAds = false;
+    private BBIMAManager mAdManager;
+    private ViewGroup.LayoutParams initialParams;
     private String API_KEY;
 
     @Override
@@ -108,7 +108,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
 
             //TODO Remove the toast and enable code below
             if(hasAds) {
-                Toast.makeText(this, "Ads. are not supported yet with JWPlayer.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Ads. are not supported yet with MediaPlayer.", Toast.LENGTH_LONG).show();
                 hasAds = false;
             }
 
@@ -195,7 +195,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
         }
     }
 
-    protected void loadAds(String url) {
+    private void loadAds(String url) {
         if (hasAds) {
             mAdManager = new BBIMAManager(getApplicationContext(), url);
             mAdManager.setListener(mBabatorViewHandler.getBabator());
@@ -215,10 +215,7 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+
 
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
@@ -231,10 +228,6 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     protected void onDestroy() {
@@ -244,6 +237,14 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
         }
         releaseMediaPlayer();
         mSurfaceHolder.removeCallback(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mBabatorViewHandler != null){
+            mBabatorViewHandler.dispose();
+        }
     }
 
     @Override

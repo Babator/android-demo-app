@@ -14,30 +14,20 @@ import android.view.ViewGroup;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mPlayersView = null;
-    private VideoListAdapter mAdapter = null;
-
-
-    private Class<?>[] activities = {};
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         //region Players RecyclerView and adapter
-        mPlayersView = (RecyclerView) findViewById(R.id.gridView);
+        RecyclerView mPlayersView = (RecyclerView) findViewById(R.id.gridView);
         if (mPlayersView != null) {
             mPlayersView.setHasFixedSize(true);
             mPlayersView.setLayoutManager(new GridLayoutManager(this, 1));
-            mAdapter = new VideoListAdapter(this, DemoAppUtils.loadArray(this, R.array.players));
+            VideoListAdapter mAdapter = new VideoListAdapter(this, DemoAppUtils.loadArray(this, R.array.players));
             mPlayersView.addItemDecoration(new DividerItemDecoration(this));
-
             mPlayersView.setAdapter(mAdapter);
         }
 
@@ -54,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     //region VideoListAdapter
     public class VideoListAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
-        private String [][] itemsList;
-        private Context mContext;
+        private final String [][] itemsList;
+        private final Context mContext;
 
         public VideoListAdapter(Context context, String [][] items) {
             this.itemsList = items;

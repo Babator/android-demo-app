@@ -4,9 +4,8 @@
     <string name="api_key">d035223d-8bba-40d2-bb13-5a22298250c6</string>
 
     <string name="text_sample_above">Text above video view\n On landscape player will turn into full screen</string>
-    <string name="text_sample_below">Text below video view...</string>
-    <string name="text_sample_below2">More text below video view...</string>
+    <string name="text_sample_below">Text below video view&#8230;</string>
+    <string name="text_sample_below2">More text below video view&#8230;</string>
     <string name="ad_tag_url"><![CDATA[https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=]]></string>
     <string name="ad_tag_mid_roll_url"><![CDATA[https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=]]></string>
-    <string name="video_description">Android Promotional Video (with video ad)</string>
 </resources>
