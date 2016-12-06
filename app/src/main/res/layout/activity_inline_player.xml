@@ -52,8 +52,6 @@ tools:context="android_demo_app.babator.com.androiddemoapp.PlayerActivityInline"
                     android:id="@+id/video_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
                     />
                 <FrameLayout
                     android:layout_width="match_parent"

@@ -37,7 +37,6 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
     private MediaPlayer.OnInfoListener onInfoListener;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
-    private ViewGroup.LayoutParams initialParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,6 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        initialParams = mSurfaceView.getLayoutParams();
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setDisplay(mSurfaceHolder);
         try {
@@ -181,19 +179,6 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
         }
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-
-
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
         handleAspectRatio();
@@ -201,28 +186,11 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         releaseMediaPlayer();
         mSurfaceHolder.removeCallback(this);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
 
     @Override
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {

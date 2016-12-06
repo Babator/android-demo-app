@@ -8,7 +8,7 @@ import android.widget.TextView;
  * A View holder class for the RecyclerView holding the players list
  */
 public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-    protected TextView tvName;
+    final TextView tvName;
     private final IHolderClicks mListener;
 
     /**

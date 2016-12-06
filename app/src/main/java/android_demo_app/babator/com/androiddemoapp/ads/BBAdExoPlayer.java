@@ -28,7 +28,7 @@ public class BBAdExoPlayer extends BBAdVideoViewPlayer {
         idle,
         paused,
         playing
-    };
+    }
 
     private void updatePlayerState() {
         if (stateHandler == null){
@@ -82,7 +82,7 @@ public class BBAdExoPlayer extends BBAdVideoViewPlayer {
         stateHandler = new Handler();
     }
 
-    public MediaSource setNextVideo(String nextVideo) {
+    private MediaSource setNextVideo(String nextVideo) {
         MediaSource res = null;
         if (nextVideo != null) {
             mCurrentState = PlayerState.idle;

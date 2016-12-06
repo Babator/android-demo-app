@@ -16,7 +16,6 @@ import com.longtailvideo.jwplayer.configuration.PlayerConfig;
 
 
 public class JWPlayerActivity extends BasePlayerActivity {
-    private static String TAG = "JWPlayerActivity";
     private JWPlayerView mJWPlayerView;
     private FrameLayout mPlayerContainer;
 
@@ -105,11 +104,6 @@ public class JWPlayerActivity extends BasePlayerActivity {
     protected void onPause() {
         mJWPlayerView.onPause();
         super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override

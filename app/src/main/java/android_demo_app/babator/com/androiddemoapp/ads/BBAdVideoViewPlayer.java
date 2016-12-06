@@ -14,20 +14,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by nissimpardo on 26/10/2016.
- */
-
 public class BBAdVideoViewPlayer implements BBAdVideoPlayerFactory.PlayerAdsWrapper {
     static final String TAG = "BBAdVideoViewPlayer";
-    protected static Context mContext;
-    protected Object mPlayer;
-    protected PlayerState mPlayerState = PlayerState.unknown;
-    protected static String mContentUrl;
-    protected static String mAdUrl;
-    protected boolean mIsAdDisplayed;
-    protected long mCurrentPosition;
-    protected final List<VideoAdPlayerCallback> mAdCallbacks = new ArrayList<VideoAdPlayerCallback>(1);
+    Context mContext;
+    Object mPlayer;
+    private PlayerState mPlayerState = PlayerState.unknown;
+    static String mContentUrl;
+    static String mAdUrl;
+    boolean mIsAdDisplayed;
+    long mCurrentPosition;
+    final List<VideoAdPlayerCallback> mAdCallbacks = new ArrayList<VideoAdPlayerCallback>(1);
 
     private MediaPlayer.OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
@@ -37,7 +33,7 @@ public class BBAdVideoViewPlayer implements BBAdVideoPlayerFactory.PlayerAdsWrap
     private enum PlayerState {
         unknown,
         playing,
-        paused;
+        paused
     }
 
     private void updatePlayerState() {
@@ -69,7 +65,7 @@ public class BBAdVideoViewPlayer implements BBAdVideoPlayerFactory.PlayerAdsWrap
         }, 200);
     }
 
-    public BBAdVideoViewPlayer(){
+    BBAdVideoViewPlayer(){
 
     }
     public BBAdVideoViewPlayer(Context context, Object player, String contentUrl, String adUrl) {
@@ -186,7 +182,9 @@ public class BBAdVideoViewPlayer implements BBAdVideoPlayerFactory.PlayerAdsWrap
             Field field = VideoView.class.getDeclaredField(name);
             field.setAccessible(true);
             fetched = field.get(mPlayer);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return fetched;
     }
 }
