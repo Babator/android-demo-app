@@ -1,11 +1,8 @@
 package android_demo_app.babator.com.androiddemoapp;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -19,35 +16,22 @@ import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends BasePlayerActivity {
     private static String TAG = "PlayerActivity";
-    private BabatorViewHandler mBabatorViewHandler = null;
-    private VideoView mPlayer = null;
-    private MediaController mediaControls = null;
-    private String API_KEY;
 
-    private boolean hasAds = false;
-    private BBIMAManager mAdManager;
-    private Uri initialUri;
+    private VideoView mPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        Intent intent = getIntent();
-        if(intent != null){
-            API_KEY = intent.getStringExtra("api_key");
-            hasAds = intent.getBooleanExtra("Ads", true);
-        }
-
         preparePlayer();
     }
 
     private void preparePlayer() {
         mPlayer = (VideoView) findViewById(R.id.video_view);
         if (!hasAds) {
-            initialUri = Uri.parse(getString(R.string.content_url));
             mPlayer.setVideoURI(initialUri);
             mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
@@ -63,13 +47,13 @@ public class PlayerActivity extends Activity {
                 mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        if (mediaControls == null) {
-                            mediaControls = new MediaController(PlayerActivity.this);
+                        if (mMediaController == null) {
+                            mMediaController = new MediaController(PlayerActivity.this);
                         }
 
                         try {
-                            mPlayer.setMediaController(mediaControls);
-                            mediaControls.setAnchorView(mPlayer);
+                            mPlayer.setMediaController(mMediaController);
+                            mMediaController.setAnchorView(mPlayer);
 
                         } catch (Exception e) {
                             Log.e(getClass().getSimpleName(), "Error" + e.getMessage());
@@ -119,17 +103,11 @@ public class PlayerActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
     @Override

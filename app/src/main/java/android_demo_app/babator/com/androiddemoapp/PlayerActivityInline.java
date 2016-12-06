@@ -1,14 +1,14 @@
 package android_demo_app.babator.com.androiddemoapp;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -16,26 +16,15 @@ import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
 import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 
-import java.lang.reflect.Field;
-
 import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
-public class PlayerActivityInline extends AppCompatActivity {
+public class PlayerActivityInline extends BasePlayerActivity {
     private static String TAG = "PlayerActivityInline";
-
     private VideoView mPlayer = null;
-    private MediaController mediaControls = null;
-    private String API_KEY;
-    private BabatorViewHandler mBabatorViewHandler = null;
-
-    private static final String KEY_SAVED_VIDEO_URI = "SAVED_VIDEO_URI";
-    private static final String KEY_SAVED_VIDEO_POSITION = "SAVED_VIDEO_POSITION";
-    private static String KEY_SAVED_CUSTOMERS = "SAVED_CUSTOMERS";
-    private int mVideoPosition = -1;
-
-    private final boolean hasAds = false;
-    private BBIMAManager mAdManager;
-    private Uri initialUri;
+    LinearLayout LinearLayoutAbove;
+    LinearLayout LinearLayoutBelow;
+    LinearLayout LinearLayoutBelow2;
+    ViewGroup.LayoutParams initialParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,31 +32,16 @@ public class PlayerActivityInline extends AppCompatActivity {
         setContentView(R.layout.activity_inline_player);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
-        if(savedInstanceState == null){ //1st creation of activity
-
-        } else { // we already have something. not 1st time of this activity
-            initialUri = Uri.parse(savedInstanceState.getString(KEY_SAVED_VIDEO_URI));
-            mVideoPosition = savedInstanceState.getInt(KEY_SAVED_VIDEO_POSITION);
-
-        }
-
-        Intent intent = getIntent();
-        if(intent != null){
-            API_KEY = intent.getStringExtra("api_key");
-        }
-
-        if(initialUri == null){
-            initialUri = Uri.parse(getString(R.string.content_url));
-        }
+        LinearLayoutAbove = (LinearLayout) findViewById(R.id.LinearLayoutAbove);
+        LinearLayoutBelow = (LinearLayout) findViewById(R.id.LinearLayoutBelow);
+        LinearLayoutBelow2 = (LinearLayout) findViewById(R.id.LinearLayoutBelow2);
         preparePlayer();
-
     }
 
     private void preparePlayer() {
         mPlayer = (VideoView) findViewById(R.id.video_view);
         if (!hasAds) {
-            Uri video = Uri.parse(getString(R.string.content_url));
-            mPlayer.setVideoURI(video);
+            mPlayer.setVideoURI(initialUri);
             mPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -82,13 +56,13 @@ public class PlayerActivityInline extends AppCompatActivity {
                 mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        if (mediaControls == null) {
-                            mediaControls = new MediaController(PlayerActivityInline.this);
+                        if (mMediaController == null) {
+                            mMediaController = new MediaController(PlayerActivityInline.this);
                         }
 
                         try {
-                            mPlayer.setMediaController(mediaControls);
-                            mediaControls.setAnchorView(mPlayer);
+                            mPlayer.setMediaController(mMediaController);
+                            mMediaController.setAnchorView(mPlayer);
 
                         } catch (Exception e) {
                             Log.e(getClass().getSimpleName(), "Error" + e.getMessage());
@@ -96,9 +70,6 @@ public class PlayerActivityInline extends AppCompatActivity {
                     }
                 });
                 mPlayer.start();
-                if(mVideoPosition != -1){
-                    mPlayer.seekTo(mVideoPosition);
-                }
             }
         });
     }
@@ -115,8 +86,6 @@ public class PlayerActivityInline extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(KEY_SAVED_VIDEO_URI, initialUri.toString());
-        outState.putInt(KEY_SAVED_VIDEO_POSITION, mVideoPosition);
         super.onSaveInstanceState(outState);
     }
 
@@ -127,12 +96,32 @@ public class PlayerActivityInline extends AppCompatActivity {
 
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            LinearLayoutAbove.setVisibility(View.GONE);
+            LinearLayoutBelow.setVisibility(View.GONE);
+            LinearLayoutBelow2.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mPlayer.setLayoutParams(initialParams);
+
+        }
+        else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            LinearLayoutAbove.setVisibility(View.VISIBLE);
+            LinearLayoutBelow.setVisibility(View.VISIBLE);
+            LinearLayoutBelow2.setVisibility(View.VISIBLE);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            mPlayer.setLayoutParams(params);
+        }
         super.onConfigurationChanged(newConfig);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        initialParams = mPlayer.getLayoutParams();
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
@@ -158,35 +147,11 @@ public class PlayerActivityInline extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            mVideoPosition = mPlayer.getCurrentPosition();
-            if(mBabatorViewHandler != null){
-                mBabatorViewHandler.dispose();
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
-    private Object fetchFieldByName(String name) {
-        Object fetched = null;
-        try {
-            Field field = VideoView.class.getDeclaredField(name);
-            field.setAccessible(true);
-            fetched = field.get(mPlayer);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return fetched;
-    }
 }

@@ -1,14 +1,10 @@
 package android_demo_app.babator.com.androiddemoapp;
 
-
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,7 +21,7 @@ import java.io.IOException;
 
 import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
-public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,
+public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnVideoSizeChangedListener,
         MediaPlayer.OnBufferingUpdateListener,
@@ -37,36 +33,17 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
     private static final String TAG = "MediaPlayerActivity";
 
     private MediaPlayer mMediaPlayer;
-    private MediaController mMediaController;
     private MediaPlayer.OnSeekCompleteListener onSeekCompleteListener;
     private MediaPlayer.OnInfoListener onInfoListener;
-
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
-
-    private BabatorViewHandler mBabatorViewHandler = null;
-
-    private Uri initialUri;
-    private boolean hasAds = false;
-    private BBIMAManager mAdManager;
     private ViewGroup.LayoutParams initialParams;
-    private String API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_player);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-
-        Intent intent = getIntent();
-        if(intent != null){
-            API_KEY = intent.getStringExtra("api_key");
-            hasAds = intent.getBooleanExtra("Ads", true);
-        }
-
-        if(initialUri == null){
-            initialUri = Uri.parse(getString(R.string.content_url));
-        }
 
         mSurfaceView = (SurfaceView)findViewById(R.id.surface_view);
         mSurfaceHolder = mSurfaceView.getHolder();
@@ -232,9 +209,6 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
         releaseMediaPlayer();
         mSurfaceHolder.removeCallback(this);
     }
@@ -242,17 +216,11 @@ public class MediaPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onPause() {
         super.onPause();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
 
