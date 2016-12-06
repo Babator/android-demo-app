@@ -1,11 +1,8 @@
 package android_demo_app.babator.com.androiddemoapp;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,16 +15,10 @@ import com.longtailvideo.jwplayer.JWPlayerView;
 import com.longtailvideo.jwplayer.configuration.PlayerConfig;
 
 
-public class JWPlayerActivity extends AppCompatActivity {
+public class JWPlayerActivity extends BasePlayerActivity {
     private static String TAG = "JWPlayerActivity";
-    private Uri initialUri;
-    private String API_KEY;
-
     private JWPlayerView mJWPlayerView;
-    protected boolean hasAds = false;
     private FrameLayout mPlayerContainer;
-    private ViewGroup.LayoutParams mInitialLayoutParams;
-    private BabatorViewHandler mBabatorViewHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +26,6 @@ public class JWPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_jw_player);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         mPlayerContainer = (FrameLayout) findViewById(R.id.player_container);
-
-
-        Intent intent = getIntent();
-        if(intent != null){
-            API_KEY = intent.getStringExtra("api_key");
-        }
-
-        initialUri = Uri.parse(getString(R.string.content_url));
         preparePlayer();
     }
 
@@ -102,8 +85,7 @@ public class JWPlayerActivity extends AppCompatActivity {
         mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
-                //Uri video = Uri.parse(videoParams.getVideoId());
-                //mPlayer.setVideoURI(video);
+
             }
         });
         mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
@@ -122,28 +104,16 @@ public class JWPlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         mJWPlayerView.onPause();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-            mBabatorViewHandler = null;
-        }
         super.onPause();
     }
 
     @Override
     public void onBackPressed() {
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-            mBabatorViewHandler = null;
-        }
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-            mBabatorViewHandler = null;
-        }
         mJWPlayerView.onDestroy();
         super.onDestroy();
     }

@@ -1,10 +1,7 @@
 package android_demo_app.babator.com.androiddemoapp;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 
 import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
@@ -28,14 +25,10 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 
-public class ExoPlayerActivity extends AppCompatActivity {
+public class ExoPlayerActivity extends BasePlayerActivity {
     private static String TAG = "ExoPlayerActivity";
-
-    private String API_KEY;
     private SimpleExoPlayerView simpleExoPlayerView;
-    private BabatorViewHandler mBabatorViewHandler = null;
     private SimpleExoPlayer mPlayer;
-    private Uri initialUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +36,6 @@ public class ExoPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exoplayer);
 
         simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
-
-        Intent intent = getIntent();
-        if(intent != null){
-            API_KEY = intent.getStringExtra("api_key");
-        }
-
-        initialUri = Uri.parse(getString(R.string.content_url));
 
         Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -98,17 +84,15 @@ public class ExoPlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
+        if(mPlayer != null){
+            mPlayer.setPlayWhenReady(false);
         }
+        mPlayer = null;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mBabatorViewHandler != null){
-            mBabatorViewHandler.dispose();
-        }
     }
 
 }
