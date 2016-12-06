@@ -19,12 +19,11 @@ import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
 public class PlayerActivityInline extends BasePlayerActivity {
-    private static String TAG = "PlayerActivityInline";
     private VideoView mPlayer = null;
-    LinearLayout LinearLayoutAbove;
-    LinearLayout LinearLayoutBelow;
-    LinearLayout LinearLayoutBelow2;
-    ViewGroup.LayoutParams initialParams;
+    private LinearLayout LinearLayoutAbove;
+    private LinearLayout LinearLayoutBelow;
+    private LinearLayout LinearLayoutBelow2;
+    private ViewGroup.LayoutParams initialParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +82,6 @@ public class PlayerActivityInline extends BasePlayerActivity {
         }
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
         if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -142,16 +130,6 @@ public class PlayerActivityInline extends BasePlayerActivity {
         });
         loadAds(getString(R.string.content_url));
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
 }

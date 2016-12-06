@@ -35,11 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onConfigurationChanged(final Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
 
     //region VideoListAdapter
     public class VideoListAdapter extends RecyclerView.Adapter<CustomViewHolder> {

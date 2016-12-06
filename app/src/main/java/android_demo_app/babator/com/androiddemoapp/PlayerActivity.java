@@ -1,7 +1,6 @@
 package android_demo_app.babator.com.androiddemoapp;
 
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +16,6 @@ import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
 
 public class PlayerActivity extends BasePlayerActivity {
-    private static String TAG = "PlayerActivity";
-
     private VideoView mPlayer = null;
 
     @Override
@@ -100,18 +97,4 @@ public class PlayerActivity extends BasePlayerActivity {
         //endregion
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onConfigurationChanged(final Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 }

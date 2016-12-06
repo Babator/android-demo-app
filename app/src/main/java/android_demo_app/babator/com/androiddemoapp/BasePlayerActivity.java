@@ -11,18 +11,14 @@ import com.babator.babatorui.BabatorViewHandler;
 
 import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
 
-/**
- * Created by danshneider on 06/12/2016.
- */
-
 public class BasePlayerActivity extends AppCompatActivity {
 
-    protected BabatorViewHandler mBabatorViewHandler = null;
-    protected MediaController mMediaController = null;
-    protected String API_KEY;
-    protected boolean hasAds = false;
-    protected BBIMAManager mAdManager;
-    protected Uri initialUri;
+    BabatorViewHandler mBabatorViewHandler = null;
+    MediaController mMediaController = null;
+    String API_KEY;
+    boolean hasAds = false;
+    BBIMAManager mAdManager;
+    Uri initialUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +29,6 @@ public class BasePlayerActivity extends AppCompatActivity {
             hasAds = intent.getBooleanExtra("Ads", true);
         }
         initialUri = Uri.parse(getString(R.string.content_url));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -58,8 +49,4 @@ public class BasePlayerActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

@@ -14,8 +14,6 @@ import com.longtailvideo.jwplayer.JWPlayerView;
  */
 public class BBAdVideoPlayerFactory {
 
-    private static String TAG = "BBAdVideoPlayerFactory";
-
     /**
      * PlayerAdsWrapper interface
      */
@@ -34,15 +32,15 @@ public class BBAdVideoPlayerFactory {
 
     /**
      * Get a static PlayerAdsWrapper object
-     * @param context
-     * @param player
-     * @param contentUrl
-     * @param adUrl
-     * @return
+     * @param context   Context
+     * @param player    Player object
+     * @param contentUrl Content video URL
+     * @param adUrl Ad. URL
+     * @return  PlayerAdsWrapper object
      */
     public PlayerAdsWrapper getPlayerAdsWrapper (Context context, Object player, String contentUrl, String adUrl){
         if(player == null){
-            Log.d(TAG, "getPlayerAdsWrapper: player is null");
+            Log.d("getPlayerAdsWrapper", "getPlayerAdsWrapper: player is null");
             return null;
         }
         if (player instanceof VideoView) {
@@ -52,7 +50,7 @@ public class BBAdVideoPlayerFactory {
         } else if (player instanceof JWPlayerView)
             return new BBAdJWPlayer(context, player, contentUrl, adUrl);
         else{
-            Log.d(TAG, "getPlayerAdsWrapper: player is of unknown type");
+            Log.d("getPlayerAdsWrapper", "getPlayerAdsWrapper: player is of unknown type");
             return null;
         }
     }

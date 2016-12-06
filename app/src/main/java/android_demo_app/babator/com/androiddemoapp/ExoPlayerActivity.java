@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.util.Util;
 
 
 public class ExoPlayerActivity extends BasePlayerActivity {
-    private static String TAG = "ExoPlayerActivity";
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer mPlayer;
 
@@ -90,9 +89,5 @@ public class ExoPlayerActivity extends BasePlayerActivity {
         mPlayer = null;
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
 }

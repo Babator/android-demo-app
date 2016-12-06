@@ -13,8 +13,8 @@ import com.longtailvideo.jwplayer.events.listeners.VideoPlayerEvents;
 import java.lang.reflect.Field;
 
 public class BBAdJWPlayer extends BBAdVideoViewPlayer {
-    static final String TAG = "BBAdJWPlayer";
-    private JWPlayerView mPlayer;
+    private static final String TAG = "BBAdJWPlayer";
+    private final JWPlayerView mPlayer;
     private VideoPlayerEvents.OnPlayListener mOnPlayListener;
     private VideoPlayerEvents.OnPauseListener mOnPauseListener;
     private VideoPlayerEvents.OnCompleteListener mOnCompleteListener;
@@ -210,13 +210,4 @@ public class BBAdJWPlayer extends BBAdVideoViewPlayer {
         return new VideoProgressUpdate(mPlayer.getPosition(), mPlayer.getDuration());
     }
 
-    private Object fetchFieldByName(String name) {
-        Object fetched = null;
-        try {
-            Field field = VideoView.class.getDeclaredField(name);
-            field.setAccessible(true);
-            fetched = field.get(mPlayer);
-        } catch(Exception e) {}
-        return fetched;
-    }
 }
