@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;

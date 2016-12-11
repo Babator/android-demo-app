@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
@@ -12,8 +12,7 @@ import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
 import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 
-import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
-
+import babator.com.sdkdemo.ads.BBIMAManager;
 
 public class PlayerActivity extends BasePlayerActivity {
     private VideoView mPlayer = null;

@@ -1,9 +1,8 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(CustomViewHolder caller, int position) {
                     try {
-                        Class<?> cls = Class.forName("android_demo_app.babator.com.androiddemoapp." + itemsList[position][1]);
+                        Class<?> cls = Class.forName("babator.com.sdkdemo." + itemsList[position][1]);
                         mContext.startActivity(new Intent(mContext, cls).putExtra("api_key", getString(R.string.api_key)));
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();

@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.Context;
 import android.content.res.Resources;

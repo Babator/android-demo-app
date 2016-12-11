@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +9,7 @@ import android.widget.MediaController;
 
 import com.babator.babatorui.BabatorViewHandler;
 
-import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
+import babator.com.sdkdemo.ads.BBIMAManager;
 
 public class BasePlayerActivity extends AppCompatActivity {
 

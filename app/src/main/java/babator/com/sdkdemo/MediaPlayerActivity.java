@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp;
+package babator.com.sdkdemo;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -19,7 +19,8 @@ import com.babator.babatorui.babatorcore.interfaces.OnBabatorAds;
 
 import java.io.IOException;
 
-import android_demo_app.babator.com.androiddemoapp.ads.BBIMAManager;
+import babator.com.sdkdemo.ads.BBIMAManager;
+
 
 public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,

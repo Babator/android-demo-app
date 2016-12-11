@@ -1,16 +1,13 @@
-package android_demo_app.babator.com.androiddemoapp.ads;
+package babator.com.sdkdemo.ads;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.VideoView;
 
 import com.google.ads.interactivemedia.v3.api.player.VideoAdPlayer;
 import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
 import com.longtailvideo.jwplayer.JWPlayerView;
 import com.longtailvideo.jwplayer.core.PlayerState;
 import com.longtailvideo.jwplayer.events.listeners.VideoPlayerEvents;
-
-import java.lang.reflect.Field;
 
 public class BBAdJWPlayer extends BBAdVideoViewPlayer {
     private static final String TAG = "BBAdJWPlayer";

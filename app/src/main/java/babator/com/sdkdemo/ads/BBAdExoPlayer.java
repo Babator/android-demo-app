@@ -1,4 +1,4 @@
-package android_demo_app.babator.com.androiddemoapp.ads;
+package babator.com.sdkdemo.ads;
 
 import android.content.Context;
 import android.net.Uri;
