@@ -76,6 +76,10 @@ public class ExoPlayerActivity extends BasePlayerActivity {
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
 
             }
+            @Override
+            public void onVideoAutoPlayed(BabatorViewHandler handler, String videoUrl) {
+
+            }
         });
         //endregion
     }

@@ -120,6 +120,10 @@ public class PlayerActivityInline extends BasePlayerActivity {
             public void onVideoSelected(BabatorViewHandler handler, BBVideoParams videoParams) {
 
             }
+            @Override
+            public void onVideoAutoPlayed(BabatorViewHandler handler, String videoUrl) {
+
+            }
         });
         mBabatorViewHandler.getBabator().setOnBabatorAds(new OnBabatorAds() {
             @Override
