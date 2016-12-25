@@ -69,7 +69,7 @@ public class ExoPlayerActivity extends BasePlayerActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, simpleExoPlayerView, this.getClass(), initialUri);
+        mBabatorViewHandler = new BabatorViewHandler(this, simpleExoPlayerView, this.getClass(), initialUri, true);
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
@@ -77,7 +77,7 @@ public class ExoPlayerActivity extends BasePlayerActivity {
 
             }
             @Override
-            public void onVideoAutoPlayed(BabatorViewHandler handler, String videoUrl) {
+            public void onVideoAutoPlayed(BabatorViewHandler handler, BBVideoParams videoParams) {
 
             }
         });

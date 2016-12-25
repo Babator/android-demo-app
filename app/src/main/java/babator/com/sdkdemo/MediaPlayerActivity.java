@@ -92,7 +92,7 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
             if(mBabatorViewHandler != null){
                 mBabatorViewHandler.dispose();
             }
-            mBabatorViewHandler = new BabatorViewHandler(this, mMediaPlayer, mSurfaceView, this.getClass(), initialUri) ;
+            mBabatorViewHandler = new BabatorViewHandler(this, mMediaPlayer, mSurfaceView, this.getClass(), initialUri, true) ;
             mBabatorViewHandler.initialize(API_KEY);
             mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
                 @Override
@@ -100,7 +100,7 @@ public class MediaPlayerActivity extends BasePlayerActivity implements SurfaceHo
 
                 }
                 @Override
-                public void onVideoAutoPlayed(BabatorViewHandler handler, String videoUrl) {
+                public void onVideoAutoPlayed(BabatorViewHandler handler, BBVideoParams videoParams) {
 
                 }
             });

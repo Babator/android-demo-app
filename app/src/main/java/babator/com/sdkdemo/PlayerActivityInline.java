@@ -113,7 +113,7 @@ public class PlayerActivityInline extends BasePlayerActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri);
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri, true);
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
@@ -121,7 +121,7 @@ public class PlayerActivityInline extends BasePlayerActivity {
 
             }
             @Override
-            public void onVideoAutoPlayed(BabatorViewHandler handler, String videoUrl) {
+            public void onVideoAutoPlayed(BabatorViewHandler handler, BBVideoParams videoParams) {
 
             }
         });
