@@ -79,7 +79,7 @@ public class JWPlayerActivity extends BasePlayerActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mJWPlayerView, this.getClass(), initialUri, true);
+        mBabatorViewHandler = new BabatorViewHandler(this, mJWPlayerView, this.getClass(), initialUri);
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
