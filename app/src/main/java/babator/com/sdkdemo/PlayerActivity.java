@@ -77,7 +77,7 @@ public class PlayerActivity extends BasePlayerActivity {
         if(mBabatorViewHandler != null){
             mBabatorViewHandler.dispose();
         }
-        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri);
+        mBabatorViewHandler = new BabatorViewHandler(this, mPlayer, this.getClass(), initialUri, true);
         mBabatorViewHandler.initialize(API_KEY);
         mBabatorViewHandler.setListener(new BabatorViewHandler.Listener() {
             @Override
