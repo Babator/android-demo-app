@@ -76,6 +76,7 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
     public void onAdError(AdErrorEvent adErrorEvent) {
         Log.d("BBIMAManager", adErrorEvent.getError().getMessage());
         mListener.onAdEventChanged(BBAdsHandler.AdEvent.error, mPlayerHandler.getAdUrl());
+        mPlayerHandler.restorePlayerContent(mContext);
     }
 
     @Override
@@ -122,6 +123,12 @@ public class BBIMAManager implements AdErrorEvent.AdErrorListener, AdsLoader.Ads
                 break;
             case SKIPPED:
                 mListener.onAdEventChanged(BBAdsHandler.AdEvent.skipped, mPlayerHandler.getAdUrl());
+                break;
+            case RESUMED:
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.resumed, mPlayerHandler.getAdUrl());
+                break;
+            case PAUSED:
+                mListener.onAdEventChanged(BBAdsHandler.AdEvent.paused, mPlayerHandler.getAdUrl());
                 break;
             default:
                 break;

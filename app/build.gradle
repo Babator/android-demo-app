@@ -9,7 +9,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 17
-        versionName "1.0.20"
+        versionName "1.0.33"
     }
     buildTypes {
         release {
@@ -33,5 +33,5 @@ dependencies {
     //compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.5.2'
     compile 'com.google.android.exoplayer:exoplayer:r2.0.3'
     compile 'com.longtailvideo.jwplayer:jwplayer-android-sdk:+'
-    compile 'com.babator.babatorui:babatorui:0.1.0.23'
+    compile 'com.babator.babatorui:babatorui:0.1.0.33'
 }
