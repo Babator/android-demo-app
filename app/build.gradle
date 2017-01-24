@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "babator.com.sdkdemo"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 17
-        versionName "1.0.33"
+        versionName "1.0.34"
     }
     buildTypes {
         release {
@@ -26,12 +26,12 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:support-v13:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-v13:25.1.0'
     compile 'com.google.android.gms:play-services-ads:10.0.1'
     //compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.5.2'
     compile 'com.google.android.exoplayer:exoplayer:r2.0.3'
     compile 'com.longtailvideo.jwplayer:jwplayer-android-sdk:+'
-    compile 'com.babator.babatorui:babatorui:0.1.0.33'
+    compile 'com.babator.babatorui:babatorui:0.1.0.34'
 }
