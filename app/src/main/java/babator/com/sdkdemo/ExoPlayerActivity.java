@@ -1,7 +1,6 @@
 package babator.com.sdkdemo;
 
 import android.os.Bundle;
-import android.os.Handler;
 
 import com.babator.babatorui.BabatorViewHandler;
 import com.babator.babatorui.babatorcore.BBVideoParams;
@@ -36,12 +35,12 @@ public class ExoPlayerActivity extends BasePlayerActivity {
 
         simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
 
-        Handler mainHandler = new Handler();
+        //Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector =
-                new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
+                new DefaultTrackSelector(videoTrackSelectionFactory);
 
         LoadControl loadControl = new DefaultLoadControl();
 
